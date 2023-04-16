@@ -1,11 +1,12 @@
 package com.jot;
 
+import jdk.incubator.concurrent.ScopedValue;
+
 public class ScopedValueDemo {
 
-	//private static ScopedValue<String> VALUE = 
+	final static ScopedValue<String> STRINGSCOPE = ScopedValue.newInstance();
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 	}
 
