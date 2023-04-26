@@ -14,18 +14,15 @@ public class ScopedValueDemo {
 
     /* Simple example for the use of ScopedValues  */
 
-    private static  Runnable printMessage = () -> {
-        System.out.println(Thread.currentThread());
-        String message = "Username is "+USERNAME.get();
-        System.out.println(message);
-        System.out.println(Thread.currentThread());
-    };
+    private static  Runnable printMessage = () ->  System.out.println("Username is "+USERNAME.get());
 
-	public static void scopedValueInSimpleAction(List<String> usernames) throws Exception {
-        System.out.println(Thread.currentThread());
-		for (String username : usernames) {
-			ScopedValue.where(USERNAME, username).run(printMessage);
-		}
+	public static void scopedValueInSimpleAction() throws Exception {
+
+        ScopedValue.where(USERNAME, "Bob").run(printMessage);
+
+        ScopedValue.where(USERNAME, "Chris").run(printMessage);
+
+        System.out.println("Username bound: "+ USERNAME.isBound());
 	}
 
     /* Example for isBound Method  */
