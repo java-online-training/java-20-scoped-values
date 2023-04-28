@@ -3,7 +3,6 @@ package com.jot;
 import jdk.incubator.concurrent.ScopedValue;
 import jdk.incubator.concurrent.StructuredTaskScope;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -12,7 +11,7 @@ public class ScopedValueThreadingExample {
 
     public final static ScopedValue<String> USERNAME = ScopedValue.newInstance();
 
-    private static class VThreadStarter implements Runnable {
+    private static class VirtualThreadStarter implements Runnable {
         public void run() {
             try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
                 Future<String> task1 = scope.fork(revertUsername);
@@ -30,17 +29,17 @@ public class ScopedValueThreadingExample {
         }
     }
 
-    private static Callable<String> revertUsername = () -> {
-        if (USERNAME.isBound() && USERNAME.get() != null) {
+    private static final Callable<String> revertUsername = () -> {
+        if (USERNAME.isBound()) {
             return new StringBuilder(USERNAME.get()).reverse().toString();
-        };
+        }
         return "";
     };
 
-    public static void main(String[] args) throws Exception {
-        List<String> names = Arrays.asList("Ernie", "Bert", "Jack");
+    public static void main(String[] args)  {
+        List<String> names = List.of("Ernie", "Bert", "Jack");
         for (String username : names) {
-            ScopedValue.where(USERNAME, username).run(new VThreadStarter());
+            ScopedValue.where(USERNAME, username).run(new VirtualThreadStarter());
         }
     }
 }
